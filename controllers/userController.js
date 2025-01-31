@@ -12,7 +12,7 @@ const blacklistedTokens = new Set();
 exports.registerUser=async (req,res)=>{
     console.log(req.body);  // Log the request body to verify it's being received correctly
 
-    const { firstName, lastName, email, password, confirmPassword, imageUrl, address, phone, gender, birthDate } = req.body;
+    const { firstName, lastName, email, password, imageUrl, address, phone, gender, birthDate } = req.body;
         if(!firstName||!lastName||!email||!password){
             return res.status(400).json({ message: "Missing required fields" });
 

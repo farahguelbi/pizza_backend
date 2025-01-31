@@ -14,6 +14,7 @@ const wishlistRoutes = require('./routes/wishlistRoutes');
 const saleRoutes = require('./routes/saleRoutes');
 const cartRoutes=require('./routes/cartRoutes');
 const CommandRoutes=require('./routes/commandRoutes');
+const PizzaCustomRoutes = require("./routes/pizzaCustomRoutes");
 const app=express();
 dotenv.config();
 app.use(morgan('dev'))
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use('/api/ingredients', ingredientRoutes);
 app.use('/api/pizzas', pizzaRoutes);
+app.use('/api/pizzaCustom', PizzaCustomRoutes);
 app.use('/api/sides', sideRoutes);
 app.use('/api/types', typeRoutes);
 app.use('/api/wishlist', wishlistRoutes);

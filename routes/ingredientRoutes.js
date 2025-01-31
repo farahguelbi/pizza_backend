@@ -6,7 +6,7 @@ router.get('/',ingredientController.getAllIngredients);
 //Route to get ingredient by ID 
 router.get('/:id',ingredientController.getIngredientById);
 //get ingredient by layer
-router.get('/by-layer',ingredientController.getIngredientsByLayer);
+// router.get('/by-layer',ingredientController.getIngredientsByLayer);
 
 module.exports=router;
 

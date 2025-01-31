@@ -4,7 +4,6 @@ const type = require('./type');
 // Sale schema to store sale details with quantities for pizzas and sides
 const saleSchema = new mongoose.Schema(
   {
-    // Pizza reference with quantity
     pizzaId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Pizza',
@@ -24,26 +23,18 @@ const saleSchema = new mongoose.Schema(
     },
 
     // Total price for the sale (pizza + sides)
-    totalprice: {
+    totalPrice: {
       type: Number,
       required: true,
+      default:0,
     },
 
-    // Sides array (each with quantity)
     sides: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Side',
-        required: true,
+        sideId: { type: mongoose.Schema.Types.ObjectId, ref: 'Side', required: true },
+        quantity: { type: Number, required: true, min: 1 },
       },
     ],
-    quantitiesides: [
-      {
-        type: Number,
-        required: true,
-        min: 1,
-      },
-    ], // To hold the quantity for each side
   },
   { timestamps: true }
 );

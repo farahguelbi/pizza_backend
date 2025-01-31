@@ -1,7 +1,6 @@
 const mongoose=require('mongoose');
-const type = require('./type');
 
-const pizzaSchema=new mongoose.Schema(
+const pizzaCustomSchema=new mongoose.Schema(
     {
         name:{
             type:String,
@@ -9,45 +8,45 @@ const pizzaSchema=new mongoose.Schema(
             trim:true,
             default:'Custom pizza'
         },
-        image:{
-            type:String,
-            default:''
+        // image:{
+        //     type:String,
+        //     default:''
 
-        },
-        reference:{
-            type:String,
-            default:''
-        },
-        description:{
-            type:String,
-            default:''
-        },
+        // },
+        // reference:{
+        //     type:String,
+        //     default:''
+        // },
+        // description:{
+        //     type:String,
+        //     default:''
+        // },
         price:{
             type:Number,
             required:true,
             default:0
         },
-        ingredients:
-            [
-                {
-                   type:mongoose.Schema.Types.ObjectId,ref:'Ingredient',
-                   quantity: { type: Number, default: 1 }
-                }
-            ],
-       
+        ingredients: [
+          {
+            ingredientId: {
+             type:String,
+              required: true,
+            },
+            quantity: {
+              type: Number,
+              required: true,
+              default: 1,
+            },
+          },
+        ],
+        
     
         // type:{
         //     type:mongoose.Schema.Types.ObjectId,
         //     ref:'Type',
         //     required:true
         // },
-        type:{
-            type: String,
-            enum: ['Full Pizza', 'Slice'],
-            required: true,
-            default:'Full Pizza'
-
-        },
+    
 
         size: { 
             small: {
@@ -80,6 +79,6 @@ const pizzaSchema=new mongoose.Schema(
        
          { timestamps: true });
 
-module.exports = mongoose.model('Pizza', pizzaSchema);
+module.exports = mongoose.model('PizzaCustom', pizzaCustomSchema);
 
     

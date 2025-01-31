@@ -10,14 +10,13 @@ const ingredientSchema =new mongoose.Schema({
     },
     image:{
         type:String,
-       // required:true
-       default:''
+       required:true
     },
-    layer: {
-    type: String,
-    enum: ['dough', 'sauce', 'cheese', 'topping'],  
-    required: true,
-      }
+    // layer: {
+    // type: Number,
+    // enum: [1, 2, 3, 4],  
+    // required: true,
+    //   }
   
 });
 module.exports=mongoose.model('Ingredient',ingredientSchema);

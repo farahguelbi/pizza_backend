@@ -10,7 +10,7 @@ const sideSchema=new mongoose.Schema({
         required:true
     },
     type:{
-        type:Number,
+        type:String,
         enum:['drinks','fries'],
         required:true
     },

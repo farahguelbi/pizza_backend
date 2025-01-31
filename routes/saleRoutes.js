@@ -1,19 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const saleController = require('../controllers/saleController');  // Adjust path if needed
+const saleController = require('../controllers/saleController');
 
-// Route to create a new sale
-router.post('/create', saleController.create);
-// Define the route to get all sales
+// Routes pour les ventes
+router.post('/create', saleController.createSale);
+router.post('/add-sides', saleController.addMultipleSides);
+router.post('/update', saleController.updateSale);
+router.get('/:saleId', saleController.getSaleById);
 router.get('/', saleController.getAllSales);
 
-// Route to get a sale by its ID
-router.get('/:saleId', saleController.getSaleById);
-
-// Route to update a sale by its ID
-router.put('/update/:saleId', saleController.updateSale);
-
-// Route to delete a sale by its ID
-router.delete('/delete/:saleId', saleController.deleteSale);
+router.delete('/:saleId', saleController.deleteSale);
 
 module.exports = router;
