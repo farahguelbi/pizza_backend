@@ -28,7 +28,7 @@ const pizzaCustomSchema=new mongoose.Schema(
         },
         ingredients: [
           {
-            ingredientId: {
+            ingredient: {
              type:String,
               required: true,
             },
@@ -46,19 +46,20 @@ const pizzaCustomSchema=new mongoose.Schema(
         //     ref:'Type',
         //     required:true
         // },
-    
+          userId:{type : String , required : true},
+          size:{type : String , required : true}
 
-        size: { 
-            small: {
-              price: { type: Number, required: true },
-            },
-            medium: {
-              price: { type: Number, required: true },
-            },
-            large: {
-              price: { type: Number, required: true },
-            }
-          },
+        // size: { 
+        //     small: {
+        //       price: { type: Number, required: true },
+        //     },
+        //     medium: {
+        //       price: { type: Number, required: true },
+        //     },
+        //     large: {
+        //       price: { type: Number, required: true },
+        //     }
+        //   },
        
         },
 
