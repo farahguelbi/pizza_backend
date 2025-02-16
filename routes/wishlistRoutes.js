@@ -9,7 +9,7 @@ router.post('/add',wishlistController.addToWishlist);  // Make sure the function
 // Remove pizza from wishlist
 router.delete('/remove/:userId/:pizzaId', wishlistController.removeFromWishlist);
 // Get user's wishlist
-router.get('/:userId', wishlistController.getWishlist);
+router.get('/', wishlistController.getWishlist);
 // create 
 router.post('/create',wishlistController.createWishList);
 

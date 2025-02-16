@@ -103,32 +103,80 @@ exports.removeFromWishlist = async (req, res) => {
 //   }
 // };
 // get all pizzas in the user's wishlist
+// exports.getWishlist = async (req, res) => {
+//   const { userId } = req.query; 
+
+//   try {
+//     // Find the wishlist of the user
+//     const wishlist = await wishlist.findOne({ userID: userId }).populate('pizzas');
+//     if (!wishlist) {
+//       return res.status(404).json({ message: 'Wishlist not found' });
+//     }
+//     res.status(200).json(wishlist); 
+//   } catch (err) {
+//     res.status(500).json({ message: err.message }); 
+//   }
+// };
+// exports.getWishlist = async (req, res) => {
+//   const userId = req.query.userID; // Use query parameter
+//   try {
+//     await Wishlist.findOne({ userID: userId }).then(async (wishlist) => {
+//       if (wishlist) {
+//         res.status(200).json(wishlist);
+//       } else {
+//         res.status(404).json({ msg: 'Wishlist not found' });
+//       }
+//     });
+//   } catch (err) {
+//     res.status(500).json(err.message);
+//   }
+// };
+
 exports.getWishlist = async (req, res) => {
-  const { userId } = req.params; // Get userId from the URL parameters
+  const userId = req.query.userID; // Use query parameter
 
   try {
-    // Find the wishlist of the user
+    // Find the wishlist and populate the pizzas field
     const wishlist = await Wishlist.findOne({ userID: userId }).populate('pizzas');
-    if (!wishlist) {
-      return res.status(404).json({ message: 'Wishlist not found' });
+    
+    if (wishlist) {
+      res.status(200).json(wishlist); // Send the populated wishlist
+    } else {
+      res.status(404).json({ msg: 'Wishlist not found' }); // Send 404 if no wishlist exists
     }
-    res.status(200).json(wishlist); 
   } catch (err) {
-    res.status(500).json({ message: err.message }); 
+    console.error('Error fetching wishlist:', err); // Log the error
+    res.status(500).json({ message: 'Internal Server Error', error: err.message });
   }
 };
 
 // const WishList = require("../models/Wishlist");
 
-exports. createWishList = async (req, res) => {
-  const newWishList = new WishList(req.body);
+// exports. createWishList = async (req, res) => {
+//   const newWishList = new WishList(req.body);
+//   try {
+//     const savedWishList = await newWishList.save();
+//     res.status(201).json(savedWishList);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// };
+exports.createWishList = async (req, res) => {
   try {
-    const savedWishList = await newWishList.save();
-    res.status(201).json(savedWishList);
-  } catch (err) {
-    res.status(500).json(err);
+    console.log("🚀 Creating Wishlist for user:", req.body.userID); // Debugging
+    if (!req.body.userID) {
+      return res.status(400).json({ message: "❌ userID is required" });
+    }
+    const newWishList = new Wishlist(req.body); 
+    await newWishList.save();
+
+    res.status(201).json({ message: "Wishlist created successfully", newWishList });
+  } catch (error) {
+    console.error("❌ Error creating wishlist:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 // exports. getWishListById = async (req, res) => {
 //   var uid = req.body.userId;

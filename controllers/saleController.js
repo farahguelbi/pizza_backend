@@ -1,33 +1,49 @@
 const Sale=require('../models/sale');
 const Pizza=require('../models/Pizza');
+const PizzaCustom=require('../models/PizzaCustom');
+
 const Side=require('../models/sides');
 
 
 // Créer une vente avec uniquement une pizza
 const createSale = async (req, res) => {
+  console.log('Received Sale Data:', req.body);
   try {
-    const { pizzaId, quantitypizza, userId } = req.body;
+    const { pizzaId, quantitypizza, userId,totalPrice,pizzaType } = req.body;
 
     // Valider les données d'entrée
-    if (!pizzaId || !quantitypizza || !userId) {
+    if (!pizzaId || !quantitypizza || !userId||!pizzaType) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
+    if (!['Pizza', 'PizzaCustom'].includes(pizzaType)) {
+      return res.status(400).json({ message: 'Invalid pizzaType' });
+    }
 
-    // Vérifier que la pizza existe
-    const pizza = await Pizza.findById(pizzaId);
+    // Check if the pizza exists
+    let pizza;
+    if (pizzaType === 'Pizza') {
+      pizza = await Pizza.findById(pizzaId);
+    } else if (pizzaType === 'PizzaCustom') {
+      pizza = await PizzaCustom.findById(pizzaId);
+    }
+
     if (!pizza) {
       return res.status(404).json({ message: 'Pizza not found' });
     }
+    // if (!pizza) {
+    //   return res.status(404).json({ message: 'Pizza not found' });
+    // }
 
     // Calculer le prix total pour la pizza
-    const totalPrice = pizza.price * quantitypizza;
+    // const totalPrice = pizza.size * quantitypizza;
 
     // Créer la vente
     const sale = new Sale({
       pizzaId,
       quantitypizza,
       userId,
-      totalPrice: totalPrice, // Total initial avec uniquement la pizza
+      totalPrice, // Total initial avec uniquement la pizza
+      pizzaType,
       sides: [], // Les sides seront ajoutés plus tard
     });
 
@@ -43,16 +59,15 @@ const createSale = async (req, res) => {
 
 const addMultipleSides = async (req, res) => {
   try {
-    const { saleId, sidesToAdd, totalprice } = req.body;
+    const { saleId, sides, totalPrice } = req.body;
 
     // Vérifier que la vente existe
     const sale = await Sale.findById(saleId);
     if (!sale) {
       return res.status(404).json({ message: 'Sale not found' });
     }
-
     // Ajouter les sides à la vente
-    sidesToAdd.forEach((side) => {
+    sides.forEach((side) => {
       sale.sides.push({
         sideId: side.sideId,
         quantity: side.quantity,
@@ -60,8 +75,8 @@ const addMultipleSides = async (req, res) => {
     });
 
     // Mettre à jour le prix total fourni par le frontend
-    if (totalprice !== undefined) {
-      sale.totalprice = totalprice;
+    if (totalPrice !== undefined) {
+      sale.totalPrice = totalPrice;
     }
 
     // Enregistrer les modifications
@@ -160,12 +175,37 @@ const deleteSale = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error', error });
   }
 };
+// const getAllSales = async (req, res) => {
+//   try {
+//     // Récupérer toutes les ventes avec les relations (pizzaId et sides.sideId)
+//     const sales = await Sale.find({})
+//       .populate('pizzaId') // Remplir les informations de la pizza
+//       .populate('sides.sideId'); // Remplir les informations des sides
+
+//     if (!sales || sales.length === 0) {
+//       return res.status(404).json({ message: 'No sales found' });
+//     }
+
+//     res.status(200).json({ sales });
+//   } catch (error) {
+//     console.error('Error fetching sales:', error);
+//     res.status(500).json({ message: 'Internal Server Error', error });
+//   }
+// };
 const getAllSales = async (req, res) => {
   try {
-    // Récupérer toutes les ventes avec les relations (pizzaId et sides.sideId)
+    // Fetch all sales
     const sales = await Sale.find({})
-      .populate('pizzaId') // Remplir les informations de la pizza
-      .populate('sides.sideId'); // Remplir les informations des sides
+      .populate('sides.sideId'); // Populate sides.sideId
+
+    // Manually populate pizzaId based on pizzaType
+    for (const sale of sales) {
+      if (sale.pizzaType === 'Pizza') {
+        sale.pizzaId = await Pizza.findById(sale.pizzaId);
+      } else if (sale.pizzaType === 'PizzaCustom') {
+        sale.pizzaId = await PizzaCustom.findById(sale.pizzaId);
+      }
+    }
 
     if (!sales || sales.length === 0) {
       return res.status(404).json({ message: 'No sales found' });
@@ -177,8 +217,6 @@ const getAllSales = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error', error });
   }
 };
-
-
 module.exports = {
   createSale,
   addMultipleSides,

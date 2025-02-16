@@ -4,5 +4,7 @@ const PizzaCustomController = require('../controllers/pizzaCustomController');  
 
 // Route to get type by ID
 router.post('/create', PizzaCustomController.createPizza);
+router.get("/", PizzaCustomController.getAllPizzas);
+router.get("/:id", PizzaCustomController.getPizzaById);
 
 module.exports = router;

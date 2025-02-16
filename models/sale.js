@@ -6,15 +6,22 @@ const saleSchema = new mongoose.Schema(
   {
     pizzaId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Pizza',
+      // ref: 'Pizza',
+      refPath: 'pizzaType',
       required: true,
     },
+
     quantitypizza: {
       type: Number,
       required: true,
       min: 1,
     },
-
+    pizzaType: {
+      type: String,
+      required: true,
+      enum: ['Pizza','PizzaCustom'], 
+    
+    },
     // User reference for the person making the sale
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -35,6 +42,7 @@ const saleSchema = new mongoose.Schema(
         quantity: { type: Number, required: true, min: 1 },
       },
     ],
+ 
   },
   { timestamps: true }
 );

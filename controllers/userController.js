@@ -349,7 +349,7 @@ console.log('User found:', user);
     <!-- Header Section -->
     <div class="email-header">
       <h1>Password Reset Request</h1>
-      <img src="https://images.app.goo.gl/TetDAE5RHWLJGtEp7" alt="Reset Password Icon">
+      <img src="https://img.icons8.com/?size=100&id=P3AWPy5QyOIa&format=png&color=000000" alt="Reset Password Icon">
     </div>
 
     <!-- Email Content Section -->

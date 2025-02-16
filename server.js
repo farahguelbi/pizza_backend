@@ -35,11 +35,12 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/command', CommandRoutes);
 
 
-const Host=process.env.Host||'0.0.0.0';
+const Host = process.env.IP_ADDRESS || '0.0.0.0'; 
 //MongoDB Connection 
 mongoose
 .connect(process.env.MONGODB_URI)
 .then(()=>console.log("connected to MongoDB"))
+
 .catch((err)=>
 console.log("Error Connecting to MongoDB",err));
 //start the web server 
